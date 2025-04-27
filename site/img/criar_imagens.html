@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Imagens para Produtos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .canvas-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4a00e0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        .controls {
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .control-item {
+            margin-bottom: 10px;
+        }
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .preview-item {
+            width: calc(20% - 15px);
+            text-align: center;
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .preview-item:hover {
+            transform: translateY(-5px);
+        }
+        .preview-item img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        h1, h2 {
+            color: #4a00e0;
+        }
+        .templates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .template {
+            width: 80px;
+            height: 60px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .template.active {
+            border: 2px solid #4a00e0;
+        }
+        .header-link {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .header-link a {
+            color: #4a00e0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .header-link a:hover {
+            text-decoration: underline;
+        }
+        .game-templates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .game-categories {
+            margin-bottom: 20px;
+        }
+        .game-category {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        .game-template {
+            width: 120px;
+            height: 80px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-template.active {
+            border: 2px solid #4a00e0;
+        }
+        .game-template span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .preview-section {
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .tab-content {
+            margin-top: 20px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tab-button {
+            padding: 8px 16px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .tab-button.active {
+            background-color: #4a00e0;
+            color: white;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <div class="header-link">
+        <a href="../../index.html">
+            <span>&#8592; Voltar para página inicial</span>
+        </a>
+    </div>
+    
+    <h1>Gerador de Imagens para Produtos SUMBLER</h1>
+    
+    <div class="controls">
+        <h2>Configurações</h2>
+        
+        <div class="tab-buttons">
+            <div class="tab-button active" data-tab="simple">Imagens Simples</div>
+            <div class="tab-button" data-tab="game">Imagens com Jogos</div>
+        </div>
+        
+        <div class="tab-content">
+            <div class="tab-panel active" id="tab-simple">
+                <p>Escolha as cores e o conteúdo das imagens:</p>
+                
+                <div class="templates">
+                    <div class="template active" data-bg="#5D3FD3" data-text="#FFFFFF">
+                        <span style="color:#FFF;background:#5D3FD3;padding:2px 5px;">Padrão</span>
+                    </div>
+                    <div class="template" data-bg="#FF5555" data-text="#FFFFFF">
+                        <span style="color:#FFF;background:#FF5555;padding:2px 5px;">Vermelho</span>
+                    </div>
+                    <div class="template" data-bg="#55AAFF" data-text="#FFFFFF">
+                        <span style="color:#FFF;background:#55AAFF;padding:2px 5px;">Azul</span>
+                    </div>
+                    <div class="template" data-bg="#55FF55" data-text="#000000">
+                        <span style="color:#000;background:#55FF55;padding:2px 5px;">Verde</span>
+                    </div>
+                    <div class="template" data-bg="#333333" data-text="#FFFFFF">
+                        <span style="color:#FFF;background:#333333;padding:2px 5px;">Escuro</span>
+                    </div>
+                </div>
+                
+                <div class="control-item">
+                    <label for="bgColor">Cor de fundo:</label>
+                    <input type="color" id="bgColor" value="#5D3FD3">
+                </div>
+                <div class="control-item">
+                    <label for="textColor">Cor do texto:</label>
+                    <input type="color" id="textColor" value="#FFFFFF">
+                </div>
+                <div class="control-item">
+                    <label for="customText">Texto do produto:</label>
+                    <input type="text" id="customText" value="SUMBLER" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="logoText">Texto do logo:</label>
+                    <input type="text" id="logoText" value="SUMBLER" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="subtitleText">Subtítulo:</label>
+                    <input type="text" id="subtitleText" value="CHEATS" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="imageSize">Tamanho da imagem:</label>
+                    <select id="imageSize">
+                        <option value="small">Pequeno (200x150)</option>
+                        <option value="medium" selected>Médio (300x200)</option>
+                        <option value="large">Grande (400x250)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="tab-panel" id="tab-game">
+                <p>Escolha um jogo como fundo para suas imagens:</p>
+                
+                <div class="game-templates">
+                    <div class="game-categories">
+                        <div class="game-category">Jogos FPS Táticos</div>
+                        <div class="game-templates">
+                            <div class="game-template active" data-game="valorant" style="background-image: url('https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg')">
+                                <span>Valorant</span>
+                            </div>
+                            <div class="game-template" data-game="cs2" style="background-image: url('https://cdn.sanity.io/images/0t3k9r5h/production/dfdb2ba3226c7f75d9dbe391b82a4c5a33651c32-1200x627.png')">
+                                <span>CS2</span>
+                            </div>
+                            <div class="game-template" data-game="rainbow6" style="background-image: url('https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/2iTSmOhBfGOKiMtI88aZXW/f3f35b6833648bbc231532d42a38e33c/r6s-gameinfo-aboutgame.jpg')">
+                                <span>Rainbow Six</span>
+                            </div>
+                            <div class="game-template" data-game="pointblank" style="background-image: url('https://staticg.sportskeeda.com/editor/2023/08/4264a-16921069557236-1920.jpg')">
+                                <span>Point Blank</span>
+                            </div>
+                            <div class="game-template" data-game="crossfire" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1217950/header.jpg')">
+                                <span>CrossFire</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-categories">
+                        <div class="game-category">Battle Royale</div>
+                        <div class="game-templates">
+                            <div class="game-template" data-game="fortnite" style="background-image: url('https://cdn2.unrealengine.com/fortnite-chapter-4-season-og-5052ce1dba3d.jpg')">
+                                <span>Fortnite</span>
+                            </div>
+                            <div class="game-template" data-game="apex" style="background-image: url('https://media.contentapi.ea.com/content/dam/apex-legends/images/2019/01/apex-featured-image-16x9.jpg.adapt.crop16x9.1023w.jpg')">
+                                <span>Apex Legends</span>
+                            </div>
+                            <div class="game-template" data-game="warzone" style="background-image: url('https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/mw-wz/WZ-Season-Three-Announce-TOUT.jpg')">
+                                <span>Warzone</span>
+                            </div>
+                            <div class="game-template" data-game="pubg" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/578080/header.jpg')">
+                                <span>PUBG</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-categories">
+                        <div class="game-category">Mundo Aberto / Ação</div>
+                        <div class="game-templates">
+                            <div class="game-template" data-game="gta5" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg')">
+                                <span>GTA 5</span>
+                            </div>
+                            <div class="game-template" data-game="farcry6" style="background-image: url('https://cdn1.epicgames.com/offer/5a2a08a6fa3f4e198fba4134941482cb/FC6_StorePromo_1200x1600_1200x1600-3a0bb079a950a1e1b03e0310b19cf576')">
+                                <span>Far Cry 6</span>
+                            </div>
+                            <div class="game-template" data-game="cyberpunk" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg')">
+                                <span>Cyberpunk 2077</span>
+                            </div>
+                            <div class="game-template" data-game="rdr2" style="background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg')">
+                                <span>Red Dead 2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-item">
+                    <label for="gameTitleText">Título Principal:</label>
+                    <input type="text" id="gameTitleText" value="SUMBLER CHEATS" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="gameSubtitleText">Subtítulo:</label>
+                    <input type="text" id="gameSubtitleText" value="Domine o jogo agora!" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="gameTitleColor">Cor do título:</label>
+                    <input type="color" id="gameTitleColor" value="#FFFFFF">
+                </div>
+                <div class="control-item">
+                    <label for="gameOverlayColor">Cor do overlay:</label>
+                    <input type="color" id="gameOverlayColor" value="#4a00e0">
+                </div>
+                <div class="control-item">
+                    <label for="gameOverlayOpacity">Opacidade do overlay:</label>
+                    <input type="range" id="gameOverlayOpacity" min="0" max="1" step="0.1" value="0.5">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="canvas-container">
+        <h2>Imagem de Exemplo</h2>
+        <canvas id="canvas" width="300" height="200"></canvas>
+        <div>
+            <button id="generate">Gerar todas as imagens</button>
+            <button id="download">Baixar esta imagem</button>
+            <button id="reset">Redefinir</button>
+        </div>
+    </div>
+    
+    <div class="image-preview">
+        <!-- As imagens geradas serão mostradas aqui -->
+    </div>
+    
+    <div class="container mb-3">
+        <h1 class="text-center my-4">Gerador de Imagens de Produtos</h1>
+        
+        <div class="mb-3">
+            <input type="text" id="filtro-produtos" class="form-control" placeholder="Filtrar produtos...">
+        </div>
+        
+        <div class="row">
+            <!-- Lista de produtos -->
+            <div class="col-md-6">
+                <div class="list-group" id="lista-produtos">
+                    <!-- Produtos serão adicionados dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="btn btn-success mt-3" id="btn-gerar-todas">Gerar Todas as Imagens</button>
+    <button class="btn btn-primary mt-3" id="btn-gerar">Gerar Imagem</button>
+    <button class="btn btn-danger mt-3" id="btn-baixar" disabled>Baixar Imagem</button>
+    <button class="btn btn-info mt-3 ms-2 d-none" id="btn-baixar-zip">Baixar Todas (ZIP)</button>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const bgColorInput = document.getElementById('bgColor');
+            const textColorInput = document.getElementById('textColor');
+            const customTextInput = document.getElementById('customText');
+            const logoTextInput = document.getElementById('logoText');
+            const subtitleTextInput = document.getElementById('subtitleText');
+            const imageSizeSelect = document.getElementById('imageSize');
+            const generateBtn = document.getElementById('generate');
+            const downloadBtn = document.getElementById('download');
+            const resetBtn = document.getElementById('reset');
+            const previewContainer = document.querySelector('.image-preview');
+            const templates = document.querySelectorAll('.template');
+            
+            // Produtos para gerar imagens
+            const produtos = [
+                { nome: "Hack PointBlank", cor: "#FF5555" },
+                { nome: "Contas NFA", cor: "#55AAFF" },
+                { nome: "MultClient", cor: "#55FF55" },
+                { nome: "CrossFire AimBot", cor: "#FF55FF" },
+                { nome: "Valorant Esp + Aim", cor: "#FFAA55" },
+                { nome: "ESP Valorant", cor: "#55FFFF" },
+                { nome: "AimBot Valorant", cor: "#AA55FF" },
+                { nome: "Marvel Rivals Esp", cor: "#FF5555" },
+                { nome: "BloodStrike Esp", cor: "#55FF55" },
+                { nome: "CS2 Esp + Aim", cor: "#FFFF55" },
+                { nome: "Fortnite Aim", cor: "#1E90FF" },
+                { nome: "PUBG Mobile Esp", cor: "#FF8C00" },
+                { nome: "Apex Legends Hack", cor: "#FF4500" },
+                { nome: "Warzone Aimbot", cor: "#4B0082" },
+                { nome: "Overwatch 2 Esp", cor: "#FF69B4" },
+                { nome: "Escape from Tarkov", cor: "#556B2F" },
+                { nome: "Rainbow Six Aim", cor: "#8A2BE2" },
+                { nome: "League of Legends", cor: "#20B2AA" },
+                { nome: "Call of Duty Hack", cor: "#A0522D" },
+                { nome: "Roblox Exploit", cor: "#CD5C5C" }
+            ];
+            
+            // Configurar o tamanho do canvas
+            function setCanvasSize(size) {
+                let width, height;
+                
+                switch(size) {
+                    case 'small':
+                        width = 200;
+                        height = 150;
+                        break;
+                    case 'large':
+                        width = 400;
+                        height = 250;
+                        break;
+                    case 'medium':
+                    default:
+                        width = 300;
+                        height = 200;
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                updateCanvas();
+            }
+            
+            // Função para desenhar a imagem
+            function drawImage(ctx, bgColor, textColor, text, subtitle, logo, width, height) {
+                // Limpar canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Desenhar fundo
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, width, height);
+                
+                // Desenhar gradiente
+                const gradient = ctx.createLinearGradient(0, 0, width, height);
+                gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+                
+                // Adicionar uma borda sutil
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(0, 0, width, height);
+                
+                // Calcular tamanho da fonte baseado no tamanho do canvas
+                const mainFontSize = Math.max(Math.floor(width / 12), 16);
+                const subFontSize = Math.max(Math.floor(width / 18), 12);
+                const logoFontSize = Math.max(Math.floor(width / 24), 10);
+                
+                // Desenhar texto principal
+                ctx.fillStyle = textColor;
+                ctx.font = `bold ${mainFontSize}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, width / 2, height / 2 - mainFontSize/2);
+                
+                // Desenhar texto secundário
+                ctx.font = `${subFontSize}px Arial`;
+                ctx.fillText(subtitle, width / 2, height / 2 + subFontSize);
+                
+                // Desenhar logotipo
+                ctx.font = `bold ${logoFontSize}px Arial`;
+                ctx.fillText(logo, width / 2, height - logoFontSize);
+                
+                // Adicionar efeito de brilho
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.beginPath();
+                ctx.arc(width * 0.8, height * 0.2, width * 0.1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Atualizar a imagem quando as entradas mudarem
+            function updateCanvas() {
+                const bgColor = bgColorInput.value;
+                const textColor = textColorInput.value;
+                const text = customTextInput.value;
+                const logo = logoTextInput.value;
+                const subtitle = subtitleTextInput.value;
+                
+                drawImage(ctx, bgColor, textColor, text, subtitle, logo, canvas.width, canvas.height);
+            }
+            
+            // Evento para atualizar o tamanho da imagem
+            imageSizeSelect.addEventListener('change', function() {
+                setCanvasSize(this.value);
+            });
+            
+            // Eventos para atualizar a imagem
+            bgColorInput.addEventListener('input', updateCanvas);
+            textColorInput.addEventListener('input', updateCanvas);
+            customTextInput.addEventListener('input', updateCanvas);
+            logoTextInput.addEventListener('input', updateCanvas);
+            subtitleTextInput.addEventListener('input', updateCanvas);
+            
+            // Templates
+            templates.forEach(template => {
+                template.addEventListener('click', function() {
+                    // Remover classe ativa de todos os templates
+                    templates.forEach(t => t.classList.remove('active'));
+                    
+                    // Adicionar classe ativa ao template clicado
+                    this.classList.add('active');
+                    
+                    // Atualizar cores
+                    bgColorInput.value = this.dataset.bg;
+                    textColorInput.value = this.dataset.text;
+                    
+                    updateCanvas();
+                });
+            });
+            
+            // Baixar a imagem
+            downloadBtn.addEventListener('click', function() {
+                const link = document.createElement('a');
+                link.download = 'produto_sumbler.jpg';
+                link.href = canvas.toDataURL('image/jpeg');
+                link.click();
+            });
+            
+            // Redefinir configurações
+            resetBtn.addEventListener('click', function() {
+                bgColorInput.value = '#5D3FD3';
+                textColorInput.value = '#FFFFFF';
+                customTextInput.value = 'SUMBLER';
+                logoTextInput.value = 'SUMBLER';
+                subtitleTextInput.value = 'CHEATS';
+                imageSizeSelect.value = 'medium';
+                
+                // Redefinir template ativo
+                templates.forEach(t => t.classList.remove('active'));
+                templates[0].classList.add('active');
+                
+                setCanvasSize('medium');
+            });
+            
+            // Gerar todas as imagens
+            generateBtn.addEventListener('click', function() {
+                previewContainer.innerHTML = '';
+                
+                const size = imageSizeSelect.value;
+                let width, height;
+                
+                switch(size) {
+                    case 'small':
+                        width = 200;
+                        height = 150;
+                        break;
+                    case 'large':
+                        width = 400;
+                        height = 250;
+                        break;
+                    case 'medium':
+                    default:
+                        width = 300;
+                        height = 200;
+                }
+                
+                produtos.forEach((produto, index) => {
+                    // Criar um novo canvas para cada produto
+                    const prodCanvas = document.createElement('canvas');
+                    prodCanvas.width = width;
+                    prodCanvas.height = height;
+                    const prodCtx = prodCanvas.getContext('2d');
+                    
+                    // Desenhar a imagem
+                    drawImage(
+                        prodCtx, 
+                        produto.cor, 
+                        textColorInput.value, 
+                        produto.nome, 
+                        subtitleTextInput.value, 
+                        logoTextInput.value, 
+                        prodCanvas.width, 
+                        prodCanvas.height
+                    );
+                    
+                    // Adicionar ao preview
+                    const div = document.createElement('div');
+                    div.className = 'preview-item';
+                    
+                    const img = document.createElement('img');
+                    img.src = prodCanvas.toDataURL('image/jpeg');
+                    
+                    const p = document.createElement('p');
+                    p.textContent = `produto${index + 1}.jpg`;
+                    
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.textContent = 'Baixar';
+                    downloadBtn.addEventListener('click', function() {
+                        const link = document.createElement('a');
+                        link.download = `produto${index + 1}.jpg`;
+                        link.href = prodCanvas.toDataURL('image/jpeg');
+                        link.click();
+                    });
+                    
+                    div.appendChild(img);
+                    div.appendChild(p);
+                    div.appendChild(downloadBtn);
+                    previewContainer.appendChild(div);
+                });
+            });
+            
+            // Função para filtrar produtos
+            document.getElementById('filtro-produtos').addEventListener('input', function() {
+                const filtro = this.value.toLowerCase();
+                const listaProdutos = document.getElementById('lista-produtos');
+                listaProdutos.innerHTML = '';
+                
+                produtos.filter(produto => produto.nome.toLowerCase().includes(filtro))
+                    .forEach((produto, index) => {
+                        const option = document.createElement('button');
+                        option.classList.add('list-group-item', 'list-group-item-action');
+                        option.textContent = produto.nome;
+                        option.onclick = () => selecionarProduto(index);
+                        listaProdutos.appendChild(option);
+                    });
+            });
+
+            // Inicializar lista de produtos
+            function inicializarListaProdutos() {
+                const listaProdutos = document.getElementById('lista-produtos');
+                listaProdutos.innerHTML = '';
+                
+                produtos.forEach((produto, index) => {
+                    const option = document.createElement('button');
+                    option.classList.add('list-group-item', 'list-group-item-action');
+                    option.textContent = produto.nome;
+                    option.onclick = () => selecionarProduto(index);
+                    listaProdutos.appendChild(option);
+                });
+            }
+
+            // Inicializar a lista ao carregar a página
+            inicializarListaProdutos();
+            
+            // Inicializar o canvas
+            setCanvasSize(imageSizeSelect.value);
+
+            // Tabs handling
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    
+                    // Update active button
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update active panel
+                    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+                    document.getElementById(`tab-${tabName}`).classList.add('active');
+                    
+                    // Update canvas based on selected tab
+                    updateCanvas();
+                });
+            });
+            
+            // Game templates
+            const gameTemplates = document.querySelectorAll('.game-template');
+            gameTemplates.forEach(template => {
+                template.addEventListener('click', function() {
+                    // Remove active class from all templates
+                    gameTemplates.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked template
+                    this.classList.add('active');
+                    
+                    // Update canvas with game background
+                    updateGameCanvas();
+                });
+            });
+            
+            // Function to update canvas with game background
+            function updateGameCanvas() {
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Get selected game template
+                const activeTemplate = document.querySelector('.game-template.active');
+                const game = activeTemplate.dataset.game;
+                
+                // Get game settings
+                const titleText = document.getElementById('gameTitleText').value;
+                const subtitleText = document.getElementById('gameSubtitleText').value;
+                const titleColor = document.getElementById('gameTitleColor').value;
+                const overlayColor = document.getElementById('gameOverlayColor').value;
+                const overlayOpacity = document.getElementById('gameOverlayOpacity').value;
+                
+                // Create new image
+                const img = new Image();
+                img.onload = function() {
+                    // Clear canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw game background
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // Draw overlay
+                    ctx.fillStyle = overlayColor + Math.round(overlayOpacity * 255).toString(16).padStart(2, '0');
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw title
+                    ctx.fillStyle = titleColor;
+                    const titleFontSize = Math.max(Math.floor(canvas.width / 12), 16);
+                    ctx.font = `bold ${titleFontSize}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(titleText, canvas.width / 2, canvas.height / 2 - titleFontSize/2);
+                    
+                    // Draw subtitle
+                    const subtitleFontSize = Math.max(Math.floor(canvas.width / 18), 12);
+                    ctx.font = `${subtitleFontSize}px Arial`;
+                    ctx.fillText(subtitleText, canvas.width / 2, canvas.height / 2 + subtitleFontSize);
+                    
+                    // Draw logo
+                    const logoFontSize = Math.max(Math.floor(canvas.width / 24), 10);
+                    ctx.font = `bold ${logoFontSize}px Arial`;
+                    ctx.fillText("SUMBLER", canvas.width / 2, canvas.height - logoFontSize);
+                };
+                
+                // Set image source based on selected game
+                switch(game) {
+                    case 'valorant':
+                        img.src = 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg';
+                        break;
+                    case 'cs2':
+                        img.src = 'https://cdn.sanity.io/images/0t3k9r5h/production/dfdb2ba3226c7f75d9dbe391b82a4c5a33651c32-1200x627.png';
+                        break;
+                    case 'fortnite':
+                        img.src = 'https://cdn2.unrealengine.com/fortnite-chapter-4-season-og-5052ce1dba3d.jpg';
+                        break;
+                    case 'apex':
+                        img.src = 'https://media.contentapi.ea.com/content/dam/apex-legends/images/2019/01/apex-featured-image-16x9.jpg.adapt.crop16x9.1023w.jpg';
+                        break;
+                    case 'warzone':
+                        img.src = 'https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/mw-wz/WZ-Season-Three-Announce-TOUT.jpg';
+                        break;
+                    case 'rainbow6':
+                        img.src = 'https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/2iTSmOhBfGOKiMtI88aZXW/f3f35b6833648bbc231532d42a38e33c/r6s-gameinfo-aboutgame.jpg';
+                        break;
+                    case 'pointblank':
+                        img.src = 'https://staticg.sportskeeda.com/editor/2023/08/4264a-16921069557236-1920.jpg';
+                        break;
+                    case 'crossfire':
+                        img.src = 'https://cdn.akamai.steamstatic.com/steam/apps/1217950/header.jpg';
+                        break;
+                    case 'pubg':
+                        img.src = 'https://cdn.akamai.steamstatic.com/steam/apps/578080/header.jpg';
+                        break;
+                    case 'gta5':
+                        img.src = 'https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg';
+                        break;
+                    case 'farcry6':
+                        img.src = 'https://cdn1.epicgames.com/offer/5a2a08a6fa3f4e198fba4134941482cb/FC6_StorePromo_1200x1600_1200x1600-3a0bb079a950a1e1b03e0310b19cf576';
+                        break;
+                    case 'cyberpunk':
+                        img.src = 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg';
+                        break;
+                    case 'rdr2':
+                        img.src = 'https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg';
+                        break;
+                    default:
+                        img.src = 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg';
+                }
+            }
+            
+            // Atualizar a função original de updateCanvas para verificar qual tab está ativa
+            const originalUpdateCanvas = updateCanvas;
+            updateCanvas = function() {
+                const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+                
+                if (activeTab === 'simple') {
+                    // Use original function for simple tab
+                    const bgColor = bgColorInput.value;
+                    const textColor = textColorInput.value;
+                    const text = customTextInput.value;
+                    const logo = logoTextInput.value;
+                    const subtitle = subtitleTextInput.value;
+                    
+                    drawImage(ctx, bgColor, textColor, text, subtitle, logo, canvas.width, canvas.height);
+                } else if (activeTab === 'game') {
+                    // Use game function for game tab
+                    updateGameCanvas();
+                }
+            };
+            
+            // Add event listeners for game controls
+            document.getElementById('gameTitleText').addEventListener('input', updateGameCanvas);
+            document.getElementById('gameSubtitleText').addEventListener('input', updateGameCanvas);
+            document.getElementById('gameTitleColor').addEventListener('input', updateGameCanvas);
+            document.getElementById('gameOverlayColor').addEventListener('input', updateGameCanvas);
+            document.getElementById('gameOverlayOpacity').addEventListener('input', updateGameCanvas);
+            
+            // Modificar a função de gerar todas as imagens
+            document.getElementById('btn-gerar-todas').addEventListener('click', function() {
+                const previewsContainer = document.getElementById('previews');
+                previewsContainer.innerHTML = '';
+                
+                const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+                
+                if (activeTab === 'simple') {
+                    // Original code for simple images
+                    // ... existing code for simple images ...
+                } else if (activeTab === 'game') {
+                    // Code for game images
+                    const titleText = document.getElementById('gameTitleText').value;
+                    const subtitleText = document.getElementById('gameSubtitleText').value;
+                    const titleColor = document.getElementById('gameTitleColor').value;
+                    const overlayColor = document.getElementById('gameOverlayColor').value;
+                    const overlayOpacity = document.getElementById('gameOverlayOpacity').value;
+                    
+                    // Get selected game template
+                    const activeTemplate = document.querySelector('.game-template.active');
+                    const game = activeTemplate.dataset.game;
+                    
+                    // Get image source
+                    let imgSrc = '';
+                    switch(game) {
+                        case 'valorant':
+                            imgSrc = 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg';
+                            break;
+                        case 'cs2':
+                            imgSrc = 'https://cdn.sanity.io/images/0t3k9r5h/production/dfdb2ba3226c7f75d9dbe391b82a4c5a33651c32-1200x627.png';
+                            break;
+                        case 'fortnite':
+                            imgSrc = 'https://cdn2.unrealengine.com/fortnite-chapter-4-season-og-5052ce1dba3d.jpg';
+                            break;
+                        case 'apex':
+                            imgSrc = 'https://media.contentapi.ea.com/content/dam/apex-legends/images/2019/01/apex-featured-image-16x9.jpg.adapt.crop16x9.1023w.jpg';
+                            break;
+                        case 'warzone':
+                            imgSrc = 'https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/mw-wz/WZ-Season-Three-Announce-TOUT.jpg';
+                            break;
+                        case 'rainbow6':
+                            imgSrc = 'https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/2iTSmOhBfGOKiMtI88aZXW/f3f35b6833648bbc231532d42a38e33c/r6s-gameinfo-aboutgame.jpg';
+                            break;
+                        case 'pointblank':
+                            imgSrc = 'https://staticg.sportskeeda.com/editor/2023/08/4264a-16921069557236-1920.jpg';
+                            break;
+                        case 'crossfire':
+                            imgSrc = 'https://cdn.akamai.steamstatic.com/steam/apps/1217950/header.jpg';
+                            break;
+                        case 'pubg':
+                            imgSrc = 'https://cdn.akamai.steamstatic.com/steam/apps/578080/header.jpg';
+                            break;
+                        case 'gta5':
+                            imgSrc = 'https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg';
+                            break;
+                        case 'farcry6':
+                            imgSrc = 'https://cdn1.epicgames.com/offer/5a2a08a6fa3f4e198fba4134941482cb/FC6_StorePromo_1200x1600_1200x1600-3a0bb079a950a1e1b03e0310b19cf576';
+                            break;
+                        case 'cyberpunk':
+                            imgSrc = 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg';
+                            break;
+                        case 'rdr2':
+                            imgSrc = 'https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg';
+                            break;
+                        default:
+                            imgSrc = 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg';
+                    }
+                    
+                    produtos.forEach((produto, index) => {
+                        const previewDiv = document.createElement('div');
+                        previewDiv.classList.add('col-md-4', 'mb-3');
+                        
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 800;
+                        canvas.height = 500;
+                        canvas.classList.add('img-fluid', 'border');
+                        canvas.id = `canvas-${index}`;
+                        
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Load background image
+                        const img = new Image();
+                        img.onload = function() {
+                            // Draw game background
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            
+                            // Draw overlay
+                            ctx.fillStyle = overlayColor + Math.round(overlayOpacity * 255).toString(16).padStart(2, '0');
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            
+                            // Draw product name
+                            ctx.fillStyle = titleColor;
+                            ctx.font = 'bold 48px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(produto.nome, canvas.width / 2, canvas.height / 2 - 30);
+                            
+                            // Draw subtitle
+                            ctx.font = '36px Arial';
+                            ctx.fillText(subtitleText, canvas.width / 2, canvas.height / 2 + 50);
+                            
+                            // Draw SUMBLER logo
+                            ctx.font = 'bold 24px Arial';
+                            ctx.fillText("SUMBLER", canvas.width / 2, canvas.height - 30);
+                        };
+                        img.src = imgSrc;
+                        
+                        // Create download button
+                        const downloadBtn = document.createElement('button');
+                        downloadBtn.classList.add('btn', 'btn-danger', 'mt-2', 'w-100');
+                        downloadBtn.textContent = `Baixar ${produto.nome}`;
+                        downloadBtn.onclick = function() {
+                            const link = document.createElement('a');
+                            link.download = `${produto.nome.replace(/\s+/g, '_')}_${game}.png`;
+                            link.href = canvas.toDataURL('image/png');
+                            link.click();
+                        };
+                        
+                        previewDiv.appendChild(canvas);
+                        previewDiv.appendChild(downloadBtn);
+                        previewsContainer.appendChild(previewDiv);
+                    });
+                }
+                
+                // Mostrar botão de baixar ZIP
+                document.getElementById('btn-baixar-zip').classList.remove('d-none');
+                document.getElementById('previews-section').classList.remove('d-none');
+            });
+            
+            // Função para baixar todas as imagens como ZIP
+            document.getElementById('btn-baixar-zip').addEventListener('click', function() {
+                const zip = new JSZip();
+                const canvases = document.querySelectorAll('#previews canvas');
+                let processedCount = 0;
+                
+                // Mostrar indicador de carregamento
+                const btnZip = this;
+                const originalText = btnZip.textContent;
+                btnZip.textContent = "Preparando arquivo...";
+                btnZip.disabled = true;
+                
+                canvases.forEach((canvas, index) => {
+                    const produto = produtos[index];
+                    const imgData = canvas.toDataURL('image/png').replace('data:image/png;base64,', '');
+                    
+                    // Adicionar imagem ao ZIP
+                    zip.file(`${produto.nome.replace(/\s+/g, '_')}.png`, imgData, {base64: true});
+                    processedCount++;
+                    
+                    // Quando todas as imagens forem processadas, gerar e baixar o ZIP
+                    if (processedCount === canvases.length) {
+                        zip.generateAsync({type: 'blob'})
+                            .then(function(content) {
+                                saveAs(content, 'sumbler_produtos.zip');
+                                btnZip.textContent = originalText;
+                                btnZip.disabled = false;
+                            })
+                            .catch(function(error) {
+                                console.error('Erro ao gerar ZIP:', error);
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Imagens para Produtos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .canvas-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4a00e0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        .controls {
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .control-item {
+            margin-bottom: 10px;
+        }
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .preview-item {
+            width: calc(20% - 15px);
+            text-align: center;
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .preview-item:hover {
+            transform: translateY(-5px);
+        }
+        .preview-item img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        h1, h2 {
+            color: #4a00e0;
+        }
+        .templates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .template {
+            width: 80px;
+            height: 60px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .template.active {
+            border: 2px solid #4a00e0;
+        }
+        .header-link {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .header-link a {
+            color: #4a00e0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .header-link a:hover {
+            text-decoration: underline;
+        }
+        .game-templates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .game-template {
+            width: 120px;
+            height: 80px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-template.active {
+            border: 2px solid #4a00e0;
+        }
+        .game-template span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .preview-section {
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .tab-content {
+            margin-top: 20px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tab-button {
+            padding: 8px 16px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .tab-button.active {
+            background-color: #4a00e0;
+            color: white;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <div class="header-link">
+        <a href="../../index.html">
+            <span>&#8592; Voltar para página inicial</span>
+        </a>
+    </div>
+    
+    <h1>Gerador de Imagens para Produtos SUMBLER</h1>
+    
+    <div class="controls">
+        <h2>Configurações</h2>
+        
+        <div class="tab-buttons">
+            <div class="tab-button active" data-tab="simple">Imagens Simples</div>
+            <div class="tab-button" data-tab="game">Imagens com Jogos</div>
+        </div>
+        
+        <div class="tab-content">
+            <div class="tab-panel active" id="tab-simple">
+                <p>Escolha as cores e o conteúdo das imagens:</p>
+                
+                <div class="templates">
+                    <div class="template active" data-bg="#5D3FD3" data-text="#FFFFFF">
+                        <span style="color:#FFF;background:#5D3FD3;padding:2px 5px;">Padrão</span>
+                    </div>
+                    <div class="template" data-bg="#FF5555" data-text="#FFFFFF">
+                        <span style="color:#FFF;background:#FF5555;padding:2px 5px;">Vermelho</span>
+                    </div>
+                    <div class="template" data-bg="#55AAFF" data-text="#FFFFFF">
+                        <span style="color:#FFF;background:#55AAFF;padding:2px 5px;">Azul</span>
+                    </div>
+                    <div class="template" data-bg="#55FF55" data-text="#000000">
+                        <span style="color:#000;background:#55FF55;padding:2px 5px;">Verde</span>
+                    </div>
+                    <div class="template" data-bg="#333333" data-text="#FFFFFF">
+                        <span style="color:#FFF;background:#333333;padding:2px 5px;">Escuro</span>
+                    </div>
+                </div>
+                
+                <div class="control-item">
+                    <label for="bgColor">Cor de fundo:</label>
+                    <input type="color" id="bgColor" value="#5D3FD3">
+                </div>
+                <div class="control-item">
+                    <label for="textColor">Cor do texto:</label>
+                    <input type="color" id="textColor" value="#FFFFFF">
+                </div>
+                <div class="control-item">
+                    <label for="customText">Texto do produto:</label>
+                    <input type="text" id="customText" value="SUMBLER" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="logoText">Texto do logo:</label>
+                    <input type="text" id="logoText" value="SUMBLER" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="subtitleText">Subtítulo:</label>
+                    <input type="text" id="subtitleText" value="CHEATS" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="imageSize">Tamanho da imagem:</label>
+                    <select id="imageSize">
+                        <option value="small">Pequeno (200x150)</option>
+                        <option value="medium" selected>Médio (300x200)</option>
+                        <option value="large">Grande (400x250)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="tab-panel" id="tab-game">
+                <p>Escolha um jogo como fundo para suas imagens:</p>
+                
+                <div class="game-templates">
+                    <div class="game-template active" data-game="valorant" style="background-image: url('https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg')">
+                        <span>Valorant</span>
+                    </div>
+                    <div class="game-template" data-game="cs2" style="background-image: url('https://cdn.sanity.io/images/0t3k9r5h/production/dfdb2ba3226c7f75d9dbe391b82a4c5a33651c32-1200x627.png')">
+                        <span>CS2</span>
+                    </div>
+                    <div class="game-template" data-game="fortnite" style="background-image: url('https://cdn2.unrealengine.com/fortnite-chapter-4-season-og-5052ce1dba3d.jpg')">
+                        <span>Fortnite</span>
+                    </div>
+                    <div class="game-template" data-game="apex" style="background-image: url('https://media.contentapi.ea.com/content/dam/apex-legends/images/2019/01/apex-featured-image-16x9.jpg.adapt.crop16x9.1023w.jpg')">
+                        <span>Apex Legends</span>
+                    </div>
+                    <div class="game-template" data-game="warzone" style="background-image: url('https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/mw-wz/WZ-Season-Three-Announce-TOUT.jpg')">
+                        <span>Warzone</span>
+                    </div>
+                </div>
+                
+                <div class="control-item">
+                    <label for="gameTitleText">Título Principal:</label>
+                    <input type="text" id="gameTitleText" value="SUMBLER CHEATS" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="gameSubtitleText">Subtítulo:</label>
+                    <input type="text" id="gameSubtitleText" value="Domine o jogo agora!" style="width: 200px;">
+                </div>
+                <div class="control-item">
+                    <label for="gameTitleColor">Cor do título:</label>
+                    <input type="color" id="gameTitleColor" value="#FFFFFF">
+                </div>
+                <div class="control-item">
+                    <label for="gameOverlayColor">Cor do overlay:</label>
+                    <input type="color" id="gameOverlayColor" value="#4a00e0">
+                </div>
+                <div class="control-item">
+                    <label for="gameOverlayOpacity">Opacidade do overlay:</label>
+                    <input type="range" id="gameOverlayOpacity" min="0" max="1" step="0.1" value="0.5">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="canvas-container">
+        <h2>Imagem de Exemplo</h2>
+        <canvas id="canvas" width="300" height="200"></canvas>
+        <div>
+            <button id="generate">Gerar todas as imagens</button>
+            <button id="download">Baixar esta imagem</button>
+            <button id="reset">Redefinir</button>
+        </div>
+    </div>
+    
+    <div class="image-preview">
+        <!-- As imagens geradas serão mostradas aqui -->
+    </div>
+    
+    <div class="container mb-3">
+        <h1 class="text-center my-4">Gerador de Imagens de Produtos</h1>
+        
+        <div class="mb-3">
+            <input type="text" id="filtro-produtos" class="form-control" placeholder="Filtrar produtos...">
+        </div>
+        
+        <div class="row">
+            <!-- Lista de produtos -->
+            <div class="col-md-6">
+                <div class="list-group" id="lista-produtos">
+                    <!-- Produtos serão adicionados dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="btn btn-success mt-3" id="btn-gerar-todas">Gerar Todas as Imagens</button>
+    <button class="btn btn-primary mt-3" id="btn-gerar">Gerar Imagem</button>
+    <button class="btn btn-danger mt-3" id="btn-baixar" disabled>Baixar Imagem</button>
+    <button class="btn btn-info mt-3 ms-2 d-none" id="btn-baixar-zip">Baixar Todas (ZIP)</button>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const bgColorInput = document.getElementById('bgColor');
+            const textColorInput = document.getElementById('textColor');
+            const customTextInput = document.getElementById('customText');
+            const logoTextInput = document.getElementById('logoText');
+            const subtitleTextInput = document.getElementById('subtitleText');
+            const imageSizeSelect = document.getElementById('imageSize');
+            const generateBtn = document.getElementById('generate');
+            const downloadBtn = document.getElementById('download');
+            const resetBtn = document.getElementById('reset');
+            const previewContainer = document.querySelector('.image-preview');
+            const templates = document.querySelectorAll('.template');
+            
+            // Produtos para gerar imagens
+            const produtos = [
+                { nome: "Hack PointBlank", cor: "#FF5555" },
+                { nome: "Contas NFA", cor: "#55AAFF" },
+                { nome: "MultClient", cor: "#55FF55" },
+                { nome: "CrossFire AimBot", cor: "#FF55FF" },
+                { nome: "Valorant Esp + Aim", cor: "#FFAA55" },
+                { nome: "ESP Valorant", cor: "#55FFFF" },
+                { nome: "AimBot Valorant", cor: "#AA55FF" },
+                { nome: "Marvel Rivals Esp", cor: "#FF5555" },
+                { nome: "BloodStrike Esp", cor: "#55FF55" },
+                { nome: "CS2 Esp + Aim", cor: "#FFFF55" },
+                { nome: "Fortnite Aim", cor: "#1E90FF" },
+                { nome: "PUBG Mobile Esp", cor: "#FF8C00" },
+                { nome: "Apex Legends Hack", cor: "#FF4500" },
+                { nome: "Warzone Aimbot", cor: "#4B0082" },
+                { nome: "Overwatch 2 Esp", cor: "#FF69B4" },
+                { nome: "Escape from Tarkov", cor: "#556B2F" },
+                { nome: "Rainbow Six Aim", cor: "#8A2BE2" },
+                { nome: "League of Legends", cor: "#20B2AA" },
+                { nome: "Call of Duty Hack", cor: "#A0522D" },
+                { nome: "Roblox Exploit", cor: "#CD5C5C" }
+            ];
+            
+            // Configurar o tamanho do canvas
+            function setCanvasSize(size) {
+                let width, height;
+                
+                switch(size) {
+                    case 'small':
+                        width = 200;
+                        height = 150;
+                        break;
+                    case 'large':
+                        width = 400;
+                        height = 250;
+                        break;
+                    case 'medium':
+                    default:
+                        width = 300;
+                        height = 200;
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                updateCanvas();
+            }
+            
+            // Função para desenhar a imagem
+            function drawImage(ctx, bgColor, textColor, text, subtitle, logo, width, height) {
+                // Limpar canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Desenhar fundo
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, width, height);
+                
+                // Desenhar gradiente
+                const gradient = ctx.createLinearGradient(0, 0, width, height);
+                gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+                
+                // Adicionar uma borda sutil
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(0, 0, width, height);
+                
+                // Calcular tamanho da fonte baseado no tamanho do canvas
+                const mainFontSize = Math.max(Math.floor(width / 12), 16);
+                const subFontSize = Math.max(Math.floor(width / 18), 12);
+                const logoFontSize = Math.max(Math.floor(width / 24), 10);
+                
+                // Desenhar texto principal
+                ctx.fillStyle = textColor;
+                ctx.font = `bold ${mainFontSize}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, width / 2, height / 2 - mainFontSize/2);
+                
+                // Desenhar texto secundário
+                ctx.font = `${subFontSize}px Arial`;
+                ctx.fillText(subtitle, width / 2, height / 2 + subFontSize);
+                
+                // Desenhar logotipo
+                ctx.font = `bold ${logoFontSize}px Arial`;
+                ctx.fillText(logo, width / 2, height - logoFontSize);
+                
+                // Adicionar efeito de brilho
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.beginPath();
+                ctx.arc(width * 0.8, height * 0.2, width * 0.1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Atualizar a imagem quando as entradas mudarem
+            function updateCanvas() {
+                const bgColor = bgColorInput.value;
+                const textColor = textColorInput.value;
+                const text = customTextInput.value;
+                const logo = logoTextInput.value;
+                const subtitle = subtitleTextInput.value;
+                
+                drawImage(ctx, bgColor, textColor, text, subtitle, logo, canvas.width, canvas.height);
+            }
+            
+            // Evento para atualizar o tamanho da imagem
+            imageSizeSelect.addEventListener('change', function() {
+                setCanvasSize(this.value);
+            });
+            
+            // Eventos para atualizar a imagem
+            bgColorInput.addEventListener('input', updateCanvas);
+            textColorInput.addEventListener('input', updateCanvas);
+            customTextInput.addEventListener('input', updateCanvas);
+            logoTextInput.addEventListener('input', updateCanvas);
+            subtitleTextInput.addEventListener('input', updateCanvas);
+            
+            // Templates
+            templates.forEach(template => {
+                template.addEventListener('click', function() {
+                    // Remover classe ativa de todos os templates
+                    templates.forEach(t => t.classList.remove('active'));
+                    
+                    // Adicionar classe ativa ao template clicado
+                    this.classList.add('active');
+                    
+                    // Atualizar cores
+                    bgColorInput.value = this.dataset.bg;
+                    textColorInput.value = this.dataset.text;
+                    
+                    updateCanvas();
+                });
+            });
+            
+            // Baixar a imagem
+            downloadBtn.addEventListener('click', function() {
+                const link = document.createElement('a');
+                link.download = 'produto_sumbler.jpg';
+                link.href = canvas.toDataURL('image/jpeg');
+                link.click();
+            });
+            
+            // Redefinir configurações
+            resetBtn.addEventListener('click', function() {
+                bgColorInput.value = '#5D3FD3';
+                textColorInput.value = '#FFFFFF';
+                customTextInput.value = 'SUMBLER';
+                logoTextInput.value = 'SUMBLER';
+                subtitleTextInput.value = 'CHEATS';
+                imageSizeSelect.value = 'medium';
+                
+                // Redefinir template ativo
+                templates.forEach(t => t.classList.remove('active'));
+                templates[0].classList.add('active');
+                
+                setCanvasSize('medium');
+            });
+            
+            // Gerar todas as imagens
+            generateBtn.addEventListener('click', function() {
+                previewContainer.innerHTML = '';
+                
+                const size = imageSizeSelect.value;
+                let width, height;
+                
+                switch(size) {
+                    case 'small':
+                        width = 200;
+                        height = 150;
+                        break;
+                    case 'large':
+                        width = 400;
+                        height = 250;
+                        break;
+                    case 'medium':
+                    default:
+                        width = 300;
+                        height = 200;
+                }
+                
+                produtos.forEach((produto, index) => {
+                    // Criar um novo canvas para cada produto
+                    const prodCanvas = document.createElement('canvas');
+                    prodCanvas.width = width;
+                    prodCanvas.height = height;
+                    const prodCtx = prodCanvas.getContext('2d');
+                    
+                    // Desenhar a imagem
+                    drawImage(
+                        prodCtx, 
+                        produto.cor, 
+                        textColorInput.value, 
+                        produto.nome, 
+                        subtitleTextInput.value, 
+                        logoTextInput.value, 
+                        prodCanvas.width, 
+                        prodCanvas.height
+                    );
+                    
+                    // Adicionar ao preview
+                    const div = document.createElement('div');
+                    div.className = 'preview-item';
+                    
+                    const img = document.createElement('img');
+                    img.src = prodCanvas.toDataURL('image/jpeg');
+                    
+                    const p = document.createElement('p');
+                    p.textContent = `produto${index + 1}.jpg`;
+                    
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.textContent = 'Baixar';
+                    downloadBtn.addEventListener('click', function() {
+                        const link = document.createElement('a');
+                        link.download = `produto${index + 1}.jpg`;
+                        link.href = prodCanvas.toDataURL('image/jpeg');
+                        link.click();
+                    });
+                    
+                    div.appendChild(img);
+                    div.appendChild(p);
+                    div.appendChild(downloadBtn);
+                    previewContainer.appendChild(div);
+                });
+            });
+            
+            // Função para filtrar produtos
+            document.getElementById('filtro-produtos').addEventListener('input', function() {
+                const filtro = this.value.toLowerCase();
+                const listaProdutos = document.getElementById('lista-produtos');
+                listaProdutos.innerHTML = '';
+                
+                produtos.filter(produto => produto.nome.toLowerCase().includes(filtro))
+                    .forEach((produto, index) => {
+                        const option = document.createElement('button');
+                        option.classList.add('list-group-item', 'list-group-item-action');
+                        option.textContent = produto.nome;
+                        option.onclick = () => selecionarProduto(index);
+                        listaProdutos.appendChild(option);
+                    });
+            });
+
+            // Inicializar lista de produtos
+            function inicializarListaProdutos() {
+                const listaProdutos = document.getElementById('lista-produtos');
+                listaProdutos.innerHTML = '';
+                
+                produtos.forEach((produto, index) => {
+                    const option = document.createElement('button');
+                    option.classList.add('list-group-item', 'list-group-item-action');
+                    option.textContent = produto.nome;
+                    option.onclick = () => selecionarProduto(index);
+                    listaProdutos.appendChild(option);
+                });
+            }
+
+            // Inicializar a lista ao carregar a página
+            inicializarListaProdutos();
+            
+            // Inicializar o canvas
+            setCanvasSize(imageSizeSelect.value);
+
+            // Tabs handling
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    
+                    // Update active button
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update active panel
+                    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+                    document.getElementById(`tab-${tabName}`).classList.add('active');
+                    
+                    // Update canvas based on selected tab
+                    updateCanvas();
+                });
+            });
+            
+            // Game templates
+            const gameTemplates = document.querySelectorAll('.game-template');
+            gameTemplates.forEach(template => {
+                template.addEventListener('click', function() {
+                    // Remove active class from all templates
+                    gameTemplates.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked template
+                    this.classList.add('active');
+                    
+                    // Update canvas with game background
+                    updateGameCanvas();
+                });
+            });
+            
+            // Function to update canvas with game background
+            function updateGameCanvas() {
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Get selected game template
+                const activeTemplate = document.querySelector('.game-template.active');
+                const game = activeTemplate.dataset.game;
+                
+                // Get game settings
+                const titleText = document.getElementById('gameTitleText').value;
+                const subtitleText = document.getElementById('gameSubtitleText').value;
+                const titleColor = document.getElementById('gameTitleColor').value;
+                const overlayColor = document.getElementById('gameOverlayColor').value;
+                const overlayOpacity = document.getElementById('gameOverlayOpacity').value;
+                
+                // Create new image
+                const img = new Image();
+                img.onload = function() {
+                    // Clear canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw game background
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // Draw overlay
+                    ctx.fillStyle = overlayColor + Math.round(overlayOpacity * 255).toString(16).padStart(2, '0');
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw title
+                    ctx.fillStyle = titleColor;
+                    const titleFontSize = Math.max(Math.floor(canvas.width / 12), 16);
+                    ctx.font = `bold ${titleFontSize}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(titleText, canvas.width / 2, canvas.height / 2 - titleFontSize/2);
+                    
+                    // Draw subtitle
+                    const subtitleFontSize = Math.max(Math.floor(canvas.width / 18), 12);
+                    ctx.font = `${subtitleFontSize}px Arial`;
+                    ctx.fillText(subtitleText, canvas.width / 2, canvas.height / 2 + subtitleFontSize);
+                    
+                    // Draw logo
+                    const logoFontSize = Math.max(Math.floor(canvas.width / 24), 10);
+                    ctx.font = `bold ${logoFontSize}px Arial`;
+                    ctx.fillText("SUMBLER", canvas.width / 2, canvas.height - logoFontSize);
+                };
+                
+                // Set image source based on selected game
+                switch(game) {
+                    case 'valorant':
+                        img.src = 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg';
+                        break;
+                    case 'cs2':
+                        img.src = 'https://cdn.sanity.io/images/0t3k9r5h/production/dfdb2ba3226c7f75d9dbe391b82a4c5a33651c32-1200x627.png';
+                        break;
+                    case 'fortnite':
+                        img.src = 'https://cdn2.unrealengine.com/fortnite-chapter-4-season-og-5052ce1dba3d.jpg';
+                        break;
+                    case 'apex':
+                        img.src = 'https://media.contentapi.ea.com/content/dam/apex-legends/images/2019/01/apex-featured-image-16x9.jpg.adapt.crop16x9.1023w.jpg';
+                        break;
+                    case 'warzone':
+                        img.src = 'https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/mw-wz/WZ-Season-Three-Announce-TOUT.jpg';
+                        break;
+                    default:
+                        img.src = 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg';
+                }
+            }
+            
+            // Atualizar a função original de updateCanvas para verificar qual tab está ativa
+            const originalUpdateCanvas = updateCanvas;
+            updateCanvas = function() {
+                const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+                
+                if (activeTab === 'simple') {
+                    // Use original function for simple tab
+                    const bgColor = bgColorInput.value;
+                    const textColor = textColorInput.value;
+                    const text = customTextInput.value;
+                    const logo = logoTextInput.value;
+                    const subtitle = subtitleTextInput.value;
+                    
+                    drawImage(ctx, bgColor, textColor, text, subtitle, logo, canvas.width, canvas.height);
+                } else if (activeTab === 'game') {
+                    // Use game function for game tab
+                    updateGameCanvas();
+                }
+            };
+            
+            // Add event listeners for game controls
+            document.getElementById('gameTitleText').addEventListener('input', updateGameCanvas);
+            document.getElementById('gameSubtitleText').addEventListener('input', updateGameCanvas);
+            document.getElementById('gameTitleColor').addEventListener('input', updateGameCanvas);
+            document.getElementById('gameOverlayColor').addEventListener('input', updateGameCanvas);
+            document.getElementById('gameOverlayOpacity').addEventListener('input', updateGameCanvas);
+            
+            // Modificar a função de gerar todas as imagens
+            document.getElementById('btn-gerar-todas').addEventListener('click', function() {
+                const previewsContainer = document.getElementById('previews');
+                previewsContainer.innerHTML = '';
+                
+                const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+                
+                if (activeTab === 'simple') {
+                    // Original code for simple images
+                    // ... existing code for simple images ...
+                } else if (activeTab === 'game') {
+                    // Code for game images
+                    const titleText = document.getElementById('gameTitleText').value;
+                    const subtitleText = document.getElementById('gameSubtitleText').value;
+                    const titleColor = document.getElementById('gameTitleColor').value;
+                    const overlayColor = document.getElementById('gameOverlayColor').value;
+                    const overlayOpacity = document.getElementById('gameOverlayOpacity').value;
+                    
+                    // Get selected game template
+                    const activeTemplate = document.querySelector('.game-template.active');
+                    const game = activeTemplate.dataset.game;
+                    
+                    // Get image source
+                    let imgSrc = '';
+                    switch(game) {
+                        case 'valorant':
+                            imgSrc = 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg';
+                            break;
+                        case 'cs2':
+                            imgSrc = 'https://cdn.sanity.io/images/0t3k9r5h/production/dfdb2ba3226c7f75d9dbe391b82a4c5a33651c32-1200x627.png';
+                            break;
+                        case 'fortnite':
+                            imgSrc = 'https://cdn2.unrealengine.com/fortnite-chapter-4-season-og-5052ce1dba3d.jpg';
+                            break;
+                        case 'apex':
+                            imgSrc = 'https://media.contentapi.ea.com/content/dam/apex-legends/images/2019/01/apex-featured-image-16x9.jpg.adapt.crop16x9.1023w.jpg';
+                            break;
+                        case 'warzone':
+                            imgSrc = 'https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/mw-wz/WZ-Season-Three-Announce-TOUT.jpg';
+                            break;
+                        default:
+                            imgSrc = 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5afae17a1efec936/634dc0965c111147afa4a150/Val_Banner_PatchNotes.jpg';
+                    }
+                    
+                    produtos.forEach((produto, index) => {
+                        const previewDiv = document.createElement('div');
+                        previewDiv.classList.add('col-md-4', 'mb-3');
+                        
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 800;
+                        canvas.height = 500;
+                        canvas.classList.add('img-fluid', 'border');
+                        canvas.id = `canvas-${index}`;
+                        
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Load background image
+                        const img = new Image();
+                        img.onload = function() {
+                            // Draw game background
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            
+                            // Draw overlay
+                            ctx.fillStyle = overlayColor + Math.round(overlayOpacity * 255).toString(16).padStart(2, '0');
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            
+                            // Draw product name
+                            ctx.fillStyle = titleColor;
+                            ctx.font = 'bold 48px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(produto.nome, canvas.width / 2, canvas.height / 2 - 30);
+                            
+                            // Draw subtitle
+                            ctx.font = '36px Arial';
+                            ctx.fillText(subtitleText, canvas.width / 2, canvas.height / 2 + 50);
+                            
+                            // Draw SUMBLER logo
+                            ctx.font = 'bold 24px Arial';
+                            ctx.fillText("SUMBLER", canvas.width / 2, canvas.height - 30);
+                        };
+                        img.src = imgSrc;
+                        
+                        // Create download button
+                        const downloadBtn = document.createElement('button');
+                        downloadBtn.classList.add('btn', 'btn-danger', 'mt-2', 'w-100');
+                        downloadBtn.textContent = `Baixar ${produto.nome}`;
+                        downloadBtn.onclick = function() {
+                            const link = document.createElement('a');
+                            link.download = `${produto.nome.replace(/\s+/g, '_')}_${game}.png`;
+                            link.href = canvas.toDataURL('image/png');
+                            link.click();
+                        };
+                        
+                        previewDiv.appendChild(canvas);
+                        previewDiv.appendChild(downloadBtn);
+                        previewsContainer.appendChild(previewDiv);
+                    });
+                }
+                
+                // Mostrar botão de baixar ZIP
+                document.getElementById('btn-baixar-zip').classList.remove('d-none');
+                document.getElementById('previews-section').classList.remove('d-none');
+            });
+            
+            // Função para baixar todas as imagens como ZIP
+            document.getElementById('btn-baixar-zip').addEventListener('click', function() {
+                const zip = new JSZip();
+                const canvases = document.querySelectorAll('#previews canvas');
+                let processedCount = 0;
+                
+                // Mostrar indicador de carregamento
+                const btnZip = this;
+                const originalText = btnZip.textContent;
+                btnZip.textContent = "Preparando arquivo...";
+                btnZip.disabled = true;
+                
+                canvases.forEach((canvas, index) => {
+                    const produto = produtos[index];
+                    const imgData = canvas.toDataURL('image/png').replace('data:image/png;base64,', '');
+                    
+                    // Adicionar imagem ao ZIP
+                    zip.file(`${produto.nome.replace(/\s+/g, '_')}.png`, imgData, {base64: true});
+                    processedCount++;
+                    
+                    // Quando todas as imagens forem processadas, gerar e baixar o ZIP
+                    if (processedCount === canvases.length) {
+                        zip.generateAsync({type: 'blob'})
+                            .then(function(content) {
+                                saveAs(content, 'sumbler_produtos.zip');
+                                btnZip.textContent = originalText;
+                                btnZip.disabled = false;
+                            })
+                            .catch(function(error) {
+                                console.error('Erro ao gerar ZIP:', error);
+                                alert('Erro ao gerar arquivo ZIP. Veja o console para detalhes.');
+                                btnZip.textContent = originalText;
+                                btnZip.disabled = false;
+                            });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
