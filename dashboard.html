@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SUMBLER Cheats</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>SUMBLER Cheats</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="index.html#sobre">Nós</a></li>
+                    <li><a href="index.html#precos">Preços</a></li>
+                    <li><a href="index.html#faq">Perguntas frequentes</a></li>
+                    <li><a href="#" id="btn-logout" class="btn-cadastro">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="dashboard-header">
+        <div class="container">
+            <h1>Meu Dashboard</h1>
+            <p>Bem-vindo(a), <span id="user-name">Usuário</span>!</p>
+        </div>
+    </section>
+
+    <section class="dashboard-main">
+        <div class="container">
+            <div class="dashboard-grid">
+                <div class="dashboard-sidebar">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 id="sidebar-user-name">Usuário</h3>
+                        <p id="user-email">usuario@email.com</p>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                        <li><a href="#"><i class="fas fa-shopping-cart"></i> Meus Produtos</a></li>
+                        <li><a href="#"><i class="fas fa-download"></i> Downloads</a></li>
+                        <li><a href="#"><i class="fas fa-credit-card"></i> Pagamentos</a></li>
+                        <li><a href="#"><i class="fas fa-cog"></i> Configurações</a></li>
+                        <li><a href="#"><i class="fas fa-question-circle"></i> Suporte</a></li>
+                    </ul>
+                </div>
+                
+                <div class="dashboard-content">
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Produtos</h3>
+                                <p class="stat-value">0</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Tempo Restante</h3>
+                                <p class="stat-value">0 dias</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Downloads</h3>
+                                <p class="stat-value">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Meus Produtos</h2>
+                            <a href="#" class="btn btn-sm">Ver todos</a>
+                        </div>
+                        
+                        <div class="empty-state">
+                            <i class="fas fa-shopping-bag"></i>
+                            <h3>Você ainda não tem nenhum produto</h3>
+                            <p>Explore nossa loja e adquira os melhores cheats para seus jogos favoritos.</p>
+                            <a href="index.html#precos" class="btn">Ver Produtos</a>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Downloads Disponíveis</h2>
+                        </div>
+                        
+                        <div class="empty-state">
+                            <i class="fas fa-download"></i>
+                            <h3>Nenhum download disponível</h3>
+                            <p>Após adquirir um produto, você poderá baixá-lo aqui.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <h2>SUMBLER Community</h2>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="index.html#sobre">Nós</a></li>
+                        <li><a href="index.html#precos">Preços</a></li>
+                        <li><a href="index.html#faq">Perguntas frequentes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="#">Coletivo</a></li>
+                        <li><a href="#">Termos & regras</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="https://discord.gg/" target="_blank">Discord</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; SUMBLER Community - 2025</p>
+                <p>Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html> 

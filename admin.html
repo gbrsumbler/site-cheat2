@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - SUMBLER Cheats</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>SUMBLER Admin</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Voltar ao Site</a></li>
+                    <li><a href="#" id="btn-logout" class="btn-cadastro">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="admin-header">
+        <div class="container">
+            <h1>Painel Administrativo</h1>
+            <p>Bem-vindo(a), <span id="admin-name">Administrador</span>!</p>
+        </div>
+    </section>
+
+    <section class="admin-main">
+        <div class="container">
+            <div class="admin-grid">
+                <div class="admin-sidebar">
+                    <div class="admin-profile">
+                        <div class="admin-avatar">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3 id="sidebar-admin-name">Administrador</h3>
+                        <p id="admin-role">Administrador Principal</p>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="#usuarios"><i class="fas fa-users"></i> Usuários</a></li>
+                        <li><a href="#banimentos"><i class="fas fa-ban"></i> Banimentos</a></li>
+                        <li><a href="#produtos"><i class="fas fa-shopping-cart"></i> Produtos</a></li>
+                        <li><a href="#logs"><i class="fas fa-history"></i> Logs</a></li>
+                        <li><a href="#config"><i class="fas fa-cog"></i> Configurações</a></li>
+                    </ul>
+                </div>
+                
+                <div class="admin-content">
+                    <!-- Dashboard Section -->
+                    <div class="admin-section active" id="dashboard-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                        </div>
+                        
+                        <div class="stats-cards">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Usuários Totais</h3>
+                                    <p class="stat-value">2,843</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-ban"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Banimentos</h3>
+                                    <p class="stat-value">132</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Vendas Hoje</h3>
+                                    <p class="stat-value">47</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Receita Mensal</h3>
+                                    <p class="stat-value">R$ 15.345,00</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recent-activity">
+                            <div class="section-header">
+                                <h3>Atividades Recentes</h3>
+                            </div>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
+                                    <div class="activity-details">
+                                        <p><strong>Novo Usuário</strong> - carlos@email.com acabou de se registrar</p>
+                                        <span>Há 5 minutos</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon"><i class="fas fa-shopping-bag"></i></div>
+                                    <div class="activity-details">
+                                        <p><strong>Nova Compra</strong> - rafael@email.com comprou Valorant Esp + Aim</p>
+                                        <span>Há 17 minutos</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                                    <div class="activity-details">
+                                        <p><strong>Tentativas Suspeitas</strong> - Múltiplas tentativas de login para marcos@email.com</p>
+                                        <span>Há 28 minutos</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon danger"><i class="fas fa-ban"></i></div>
+                                    <div class="activity-details">
+                                        <p><strong>Usuário Banido</strong> - lucas@email.com foi banido por suspeita de fraude</p>
+                                        <span>Há 1 hora</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Section -->
+                    <div class="admin-section" id="usuarios-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-users"></i> Gerenciamento de Usuários</h2>
+                            <div class="header-actions">
+                                <input type="text" id="user-search" placeholder="Buscar usuário..." class="search-input">
+                                <button class="btn btn-sm" id="add-user-btn"><i class="fas fa-plus"></i> Adicionar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="role-filters">
+                            <span class="role-filter active" data-role="all">
+                                Todos
+                                <span class="badge-count">42</span>
+                            </span>
+                            <span class="role-filter" data-role="vip">
+                                VIP
+                                <span class="badge-count">15</span>
+                            </span>
+                            <span class="role-filter" data-role="moderator">
+                                Moderadores
+                                <span class="badge-count">4</span>
+                            </span>
+                            <span class="role-filter" data-role="admin">
+                                Administradores
+                                <span class="badge-count">3</span>
+                            </span>
+                        </div>
+                        
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="all-users">Todos Usuários</button>
+                            <button class="tab-btn" data-tab="vip-users">VIP</button>
+                            <button class="tab-btn" data-tab="moderators">Moderadores</button>
+                            <button class="tab-btn" data-tab="admins">Administradores</button>
+                        </div>
+                        
+                        <div class="tab-content active" id="all-users">
+                            <div class="data-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>Email</th>
+                                            <th>Cargo</th>
+                                            <th>IP</th>
+                                            <th>Data de Registro</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="users-table-body">
+                                        <!-- Sample data -->
+                                        <tr>
+                                            <td>1</td>
+                                            <td>João Silva</td>
+                                            <td>joao@email.com</td>
+                                            <td><span class="badge admin">Admin</span></td>
+                                            <td>187.32.45.67</td>
+                                            <td>15/04/2025</td>
+                                            <td>
+                                                <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                                <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Maria Oliveira</td>
+                                            <td>maria@email.com</td>
+                                            <td><span class="badge moderator">Moderador</span></td>
+                                            <td>200.145.78.90</td>
+                                            <td>22/03/2025</td>
+                                            <td>
+                                                <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                                <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Pedro Santos</td>
+                                            <td>pedro@email.com</td>
+                                            <td><span class="badge vip">VIP</span></td>
+                                            <td>189.54.23.112</td>
+                                            <td>10/04/2025</td>
+                                            <td>
+                                                <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                                <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                                <button class="action-btn ban-btn" title="Banir"><i class="fas fa-ban"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Ana Costa</td>
+                                            <td>ana@email.com</td>
+                                            <td><span class="badge">Usuário</span></td>
+                                            <td>201.45.67.89</td>
+                                            <td>05/04/2025</td>
+                                            <td>
+                                                <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                                <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                                <button class="action-btn ban-btn" title="Banir"><i class="fas fa-ban"></i></button>
+                                            </td>
+                                        </tr>
+                                        <!-- Adicionar mais usuários com diferentes cargos -->
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Carlos Mendes</td>
+                                            <td>carlos@email.com</td>
+                                            <td><span class="badge vip">VIP</span></td>
+                                            <td>178.23.56.90</td>
+                                            <td>12/04/2025</td>
+                                            <td>
+                                                <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                                <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                                <button class="action-btn ban-btn" title="Banir"><i class="fas fa-ban"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>Roberto Almeida</td>
+                                            <td>roberto@email.com</td>
+                                            <td><span class="badge moderator">Moderador</span></td>
+                                            <td>165.89.23.45</td>
+                                            <td>05/03/2025</td>
+                                            <td>
+                                                <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                                <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bans Section -->
+                    <div class="admin-section" id="banimentos-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-ban"></i> Gerenciamento de Banimentos</h2>
+                            <div class="header-actions">
+                                <input type="text" id="ban-search" placeholder="Buscar banimento..." class="search-input">
+                                <button class="btn btn-sm" id="add-ban-btn"><i class="fas fa-plus"></i> Novo Banimento</button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Usuário</th>
+                                        <th>Email</th>
+                                        <th>IP</th>
+                                        <th>HWID</th>
+                                        <th>Razão</th>
+                                        <th>Data do Ban</th>
+                                        <th>Admin</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bans-table-body">
+                                    <!-- Sample data -->
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Lucas Mendes</td>
+                                        <td>lucas@email.com</td>
+                                        <td>187.67.89.123</td>
+                                        <td>A1B2C3D4E5F6G7H8</td>
+                                        <td>Suspeita de fraude nos pagamentos</td>
+                                        <td>25/04/2025</td>
+                                        <td>João Silva</td>
+                                        <td>
+                                            <button class="action-btn unban-btn" title="Remover banimento"><i class="fas fa-undo"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Rafael Souza</td>
+                                        <td>rafael@email.com</td>
+                                        <td>190.45.67.231</td>
+                                        <td>H7G6F5E4D3C2B1A0</td>
+                                        <td>Compartilhamento de conta</td>
+                                        <td>22/04/2025</td>
+                                        <td>Maria Oliveira</td>
+                                        <td>
+                                            <button class="action-btn unban-btn" title="Remover banimento"><i class="fas fa-undo"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Painel de Produtos Section -->
+                    <div class="admin-section" id="produtos-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-shopping-cart"></i> Gerenciamento de Produtos</h2>
+                            <div class="header-actions">
+                                <input type="text" id="product-search" placeholder="Buscar produto..." class="search-input">
+                                <button class="btn btn-sm" id="add-product-btn"><i class="fas fa-plus"></i> Adicionar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nome</th>
+                                        <th>Categoria</th>
+                                        <th>Preço (R$)</th>
+                                        <th>Status</th>
+                                        <th>Vendas</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-table-body">
+                                    <!-- Sample data -->
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Valorant ESP + Aim</td>
+                                        <td>Valorant</td>
+                                        <td>110,00</td>
+                                        <td><span class="badge success">Ativo</span></td>
+                                        <td>289</td>
+                                        <td>
+                                            <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>CS2 ESP + Radar</td>
+                                        <td>CS2</td>
+                                        <td>80,00</td>
+                                        <td><span class="badge success">Ativo</span></td>
+                                        <td>347</td>
+                                        <td>
+                                            <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Apex Legends ESP</td>
+                                        <td>Apex Legends</td>
+                                        <td>95,00</td>
+                                        <td><span class="badge success">Ativo</span></td>
+                                        <td>178</td>
+                                        <td>
+                                            <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Fortnite Aimbot Premium</td>
+                                        <td>Fortnite</td>
+                                        <td>120,00</td>
+                                        <td><span class="badge">Manutenção</span></td>
+                                        <td>139</td>
+                                        <td>
+                                            <button class="action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Logs Section -->
+                    <div class="admin-section" id="logs-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-history"></i> Logs do Sistema</h2>
+                            <div class="header-actions">
+                                <input type="text" id="log-search" placeholder="Buscar nos logs..." class="search-input">
+                                <button class="btn btn-sm" id="export-logs-btn"><i class="fas fa-download"></i> Exportar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="logs-filters">
+                            <div class="filter-group">
+                                <label>Tipo:</label>
+                                <select id="log-type-filter">
+                                    <option value="all">Todos</option>
+                                    <option value="login">Login</option>
+                                    <option value="user">Usuários</option>
+                                    <option value="purchase">Compras</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="security">Segurança</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label>Data:</label>
+                                <input type="date" id="log-date-filter">
+                            </div>
+                            <button class="btn btn-sm" id="apply-log-filters">Aplicar Filtros</button>
+                            <button class="btn btn-sm" id="clear-log-filters">Limpar</button>
+                        </div>
+                        
+                        <div class="data-table logs-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Data/Hora</th>
+                                        <th>Tipo</th>
+                                        <th>Usuário</th>
+                                        <th>IP</th>
+                                        <th>Ação</th>
+                                        <th>Detalhes</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logs-table-body">
+                                    <!-- Sample data -->
+                                    <tr>
+                                        <td>1001</td>
+                                        <td>26/04/2025 15:23:45</td>
+                                        <td><span class="badge danger">Segurança</span></td>
+                                        <td>admin@sumbler.com</td>
+                                        <td>187.32.45.67</td>
+                                        <td>Visualização de senha</td>
+                                        <td>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>1000</td>
+                                        <td>26/04/2025 14:15:32</td>
+                                        <td><span class="badge admin">Admin</span></td>
+                                        <td>admin@sumbler.com</td>
+                                        <td>187.32.45.67</td>
+                                        <td>Alteração de cargo</td>
+                                        <td>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>999</td>
+                                        <td>26/04/2025 13:42:18</td>
+                                        <td><span class="badge warning">Login</span></td>
+                                        <td>pedro@email.com</td>
+                                        <td>189.54.23.112</td>
+                                        <td>Tentativa de login suspeita</td>
+                                        <td>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>998</td>
+                                        <td>26/04/2025 12:05:33</td>
+                                        <td><span class="badge">Compra</span></td>
+                                        <td>carlos@email.com</td>
+                                        <td>178.23.56.90</td>
+                                        <td>Compra realizada</td>
+                                        <td>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>997</td>
+                                        <td>26/04/2025 10:28:17</td>
+                                        <td><span class="badge">Usuário</span></td>
+                                        <td>rafael@email.com</td>
+                                        <td>190.45.67.231</td>
+                                        <td>Registro de conta</td>
+                                        <td>
+                                            <button class="action-btn view-btn" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Configurações Section -->
+                    <div class="admin-section" id="config-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-cog"></i> Configurações</h2>
+                        </div>
+                        
+                        <div class="config-tabs">
+                            <button class="tab-btn active" data-config-tab="perfil-tab">Perfil Administrador</button>
+                            <button class="tab-btn" data-config-tab="site-tab">Configurações do Site</button>
+                            <button class="tab-btn" data-config-tab="email-tab">Configurações de Email</button>
+                            <button class="tab-btn" data-config-tab="backup-tab">Backup e Restauração</button>
+                        </div>
+                        
+                        <div class="config-content active" id="perfil-tab">
+                            <form id="admin-profile-form">
+                                <div class="config-section">
+                                    <h3>Informações de Perfil</h3>
+                                    
+                                    <div class="admin-avatar-upload">
+                                        <div class="current-avatar">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div class="avatar-actions">
+                                            <button type="button" class="btn btn-sm" id="change-avatar-btn">Alterar Foto</button>
+                                            <input type="file" id="avatar-upload" hidden>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="config-grid">
+                                        <div class="config-group">
+                                            <label for="admin-name-input">Nome Completo:</label>
+                                            <input type="text" id="admin-name-input" value="João Silva">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="admin-email-input">Email:</label>
+                                            <input type="email" id="admin-email-input" value="admin@sumbler.com">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="admin-phone-input">Telefone:</label>
+                                            <input type="text" id="admin-phone-input" value="(11) 98765-4321">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="admin-role-input">Cargo:</label>
+                                            <input type="text" id="admin-role-input" value="Administrador Principal" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="config-section">
+                                    <h3>Alterar Senha</h3>
+                                    <div class="config-grid">
+                                        <div class="config-group">
+                                            <label for="admin-current-password">Senha Atual:</label>
+                                            <input type="password" id="admin-current-password">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="admin-new-password">Nova Senha:</label>
+                                            <input type="password" id="admin-new-password">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="admin-confirm-password">Confirmar Nova Senha:</label>
+                                            <input type="password" id="admin-confirm-password">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="config-content" id="site-tab">
+                            <form id="site-config-form">
+                                <div class="config-section">
+                                    <h3>Configurações Gerais</h3>
+                                    <div class="config-grid">
+                                        <div class="config-group">
+                                            <label for="site-name">Nome do Site:</label>
+                                            <input type="text" id="site-name" value="SUMBLER Cheats">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="site-description">Descrição:</label>
+                                            <textarea id="site-description">A melhor plataforma de cheats para jogos.</textarea>
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="maintenance-mode">Modo de Manutenção:</label>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="maintenance-mode">
+                                                <label for="maintenance-mode"></label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="registration-enabled">Permitir Novos Registros:</label>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="registration-enabled" checked>
+                                                <label for="registration-enabled"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="config-section">
+                                    <h3>Configurações de Usuários</h3>
+                                    <div class="config-grid">
+                                        <div class="config-group">
+                                            <label for="vip-days-default">Dias VIP Padrão:</label>
+                                            <input type="number" id="vip-days-default" value="30">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="hwid-reset-limit">Limite de Resets HWID:</label>
+                                            <input type="number" id="hwid-reset-limit" value="3">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="login-attempts">Tentativas de Login:</label>
+                                            <input type="number" id="login-attempts" value="5">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="config-content" id="email-tab">
+                            <form id="email-config-form">
+                                <div class="config-section">
+                                    <h3>Configurações de Servidor de Email</h3>
+                                    <div class="config-grid">
+                                        <div class="config-group">
+                                            <label for="smtp-server">Servidor SMTP:</label>
+                                            <input type="text" id="smtp-server" value="smtp.sumbler.com">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="smtp-port">Porta:</label>
+                                            <input type="number" id="smtp-port" value="587">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="smtp-username">Usuário:</label>
+                                            <input type="text" id="smtp-username" value="no-reply@sumbler.com">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="smtp-password">Senha:</label>
+                                            <input type="password" id="smtp-password" value="********">
+                                        </div>
+                                        
+                                        <div class="config-group">
+                                            <label for="smtp-encryption">Criptografia:</label>
+                                            <select id="smtp-encryption">
+                                                <option value="tls" selected>TLS</option>
+                                                <option value="ssl">SSL</option>
+                                                <option value="none">Nenhuma</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="config-section">
+                                    <h3>Templates de Email</h3>
+                                    <div class="email-templates">
+                                        <div class="template-selector">
+                                            <select id="email-template-select">
+                                                <option value="welcome">Boas-vindas</option>
+                                                <option value="password-reset">Recuperação de Senha</option>
+                                                <option value="purchase">Confirmação de Compra</option>
+                                                <option value="license-expiry">Expiração de Licença</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="template-editor">
+                                            <div class="editor-controls">
+                                                <button type="button" class="btn btn-sm"><i class="fas fa-bold"></i></button>
+                                                <button type="button" class="btn btn-sm"><i class="fas fa-italic"></i></button>
+                                                <button type="button" class="btn btn-sm"><i class="fas fa-link"></i></button>
+                                                <button type="button" class="btn btn-sm"><i class="fas fa-image"></i></button>
+                                            </div>
+                                            <textarea id="email-template-content" rows="10">Olá {nome},
+
+Bem-vindo à SUMBLER Cheats! Estamos animados por você fazer parte da nossa comunidade.
+
+Seus detalhes de acesso:
+Email: {email}
+Senha: (a senha que você cadastrou)
+
+Se tiver qualquer dúvida, entre em contato com nosso suporte.
+
+Atenciosamente,
+Equipe SUMBLER</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" id="test-email-btn">Enviar Email de Teste</button>
+                                    <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="config-content" id="backup-tab">
+                            <div class="config-section">
+                                <h3>Backup do Sistema</h3>
+                                <div class="backup-actions">
+                                    <button type="button" class="btn" id="create-backup-btn"><i class="fas fa-download"></i> Gerar Backup</button>
+                                    <button type="button" class="btn" id="restore-backup-btn"><i class="fas fa-upload"></i> Restaurar Backup</button>
+                                    <input type="file" id="backup-file-input" hidden>
+                                </div>
+                                
+                                <div class="config-grid">
+                                    <div class="config-group">
+                                        <label for="auto-backup">Backup Automático:</label>
+                                        <div class="toggle-switch">
+                                            <input type="checkbox" id="auto-backup" checked>
+                                            <label for="auto-backup"></label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="config-group">
+                                        <label for="backup-frequency">Frequência:</label>
+                                        <select id="backup-frequency">
+                                            <option value="daily">Diário</option>
+                                            <option value="weekly" selected>Semanal</option>
+                                            <option value="monthly">Mensal</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="config-group">
+                                        <label for="backup-retention">Retenção (dias):</label>
+                                        <input type="number" id="backup-retention" value="30">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-section">
+                                <h3>Backups Disponíveis</h3>
+                                <div class="data-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Tamanho</th>
+                                                <th>Tipo</th>
+                                                <th>Criado por</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="backups-table-body">
+                                            <tr>
+                                                <td>26/04/2025 00:00</td>
+                                                <td>24.5 MB</td>
+                                                <td>Automático</td>
+                                                <td>Sistema</td>
+                                                <td>
+                                                    <button class="action-btn download-btn" title="Baixar"><i class="fas fa-download"></i></button>
+                                                    <button class="action-btn restore-btn" title="Restaurar"><i class="fas fa-undo"></i></button>
+                                                    <button class="action-btn delete-btn" title="Excluir"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>19/04/2025 00:00</td>
+                                                <td>23.8 MB</td>
+                                                <td>Automático</td>
+                                                <td>Sistema</td>
+                                                <td>
+                                                    <button class="action-btn download-btn" title="Baixar"><i class="fas fa-download"></i></button>
+                                                    <button class="action-btn restore-btn" title="Restaurar"><i class="fas fa-undo"></i></button>
+                                                    <button class="action-btn delete-btn" title="Excluir"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>15/04/2025 14:32</td>
+                                                <td>23.2 MB</td>
+                                                <td>Manual</td>
+                                                <td>João Silva</td>
+                                                <td>
+                                                    <button class="action-btn download-btn" title="Baixar"><i class="fas fa-download"></i></button>
+                                                    <button class="action-btn restore-btn" title="Restaurar"><i class="fas fa-undo"></i></button>
+                                                    <button class="action-btn delete-btn" title="Excluir"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Modal -->
+    <div class="modal" id="user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes do Usuário</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="user-info-tabs">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="basic-info">Informações Básicas</button>
+                        <button class="tab-btn" data-tab="system-info">Informações do Sistema</button>
+                        <button class="tab-btn" data-tab="purchase-history">Histórico de Compras</button>
+                        <button class="tab-btn" data-tab="login-history">Histórico de Login</button>
+                        <button class="tab-btn" data-tab="security-info">Segurança</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="basic-info">
+                        <div class="user-details-grid">
+                            <div class="detail-group">
+                                <label>Nome:</label>
+                                <p id="user-name-detail">Pedro Santos</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Email:</label>
+                                <p id="user-email-detail">pedro@email.com</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Cargo:</label>
+                                <select id="user-role-select">
+                                    <option value="user">Usuário</option>
+                                    <option value="vip" selected>VIP</option>
+                                    <option value="moderator">Moderador</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                            </div>
+                            <div class="detail-group">
+                                <label>Data de Registro:</label>
+                                <p id="user-date-detail">10/04/2025</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Último Login:</label>
+                                <p id="user-last-login-detail">25/04/2025 14:23</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Status:</label>
+                                <p id="user-status-detail" class="status active">Ativo</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="save-user-btn">Salvar Alterações</button>
+                            <button class="btn btn-danger" id="ban-user-btn">Banir Usuário</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="system-info">
+                        <div class="user-details-grid">
+                            <div class="detail-group">
+                                <label>Endereço IP:</label>
+                                <p id="user-ip-detail">189.54.23.112</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>HWID:</label>
+                                <p id="user-hwid-detail">E3F7A9D1C5B2G6H4</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Sistema Operacional:</label>
+                                <p id="user-os-detail">Windows 11 Pro</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Processador:</label>
+                                <p id="user-cpu-detail">Intel Core i7-12700K</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Placa de Vídeo:</label>
+                                <p id="user-gpu-detail">NVIDIA GeForce RTX 3080</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>RAM:</label>
+                                <p id="user-ram-detail">32GB DDR4</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="purchase-history">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Produto</th>
+                                    <th>Valor</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1058</td>
+                                    <td>Valorant Esp + Aim (Semanal)</td>
+                                    <td>R$ 110,00</td>
+                                    <td>24/04/2025</td>
+                                    <td><span class="badge success">Ativo</span></td>
+                                </tr>
+                                <tr>
+                                    <td>932</td>
+                                    <td>CS2 Esp + Aim (Semanal)</td>
+                                    <td>R$ 30,00</td>
+                                    <td>17/04/2025</td>
+                                    <td><span class="badge">Expirado</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="tab-content" id="login-history">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th>Data e Hora</th>
+                                    <th>IP</th>
+                                    <th>Dispositivo</th>
+                                    <th>Navegador</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>25/04/2025 14:23</td>
+                                    <td>189.54.23.112</td>
+                                    <td>Desktop</td>
+                                    <td>Chrome 132.0</td>
+                                    <td><span class="badge success">Sucesso</span></td>
+                                </tr>
+                                <tr>
+                                    <td>23/04/2025 19:45</td>
+                                    <td>189.54.23.112</td>
+                                    <td>Desktop</td>
+                                    <td>Chrome 132.0</td>
+                                    <td><span class="badge success">Sucesso</span></td>
+                                </tr>
+                                <tr>
+                                    <td>20/04/2025 10:12</td>
+                                    <td>187.45.68.92</td>
+                                    <td>Mobile</td>
+                                    <td>Safari Mobile</td>
+                                    <td><span class="badge warning">Suspeito</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- New Security Tab -->
+                    <div class="tab-content" id="security-info">
+                        <div class="security-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Atenção: A visualização e alteração de senhas são operações sensíveis que são registradas nos logs do sistema.</p>
+                        </div>
+                        
+                        <div class="user-details-grid">
+                            <div class="detail-group">
+                                <label>Senha atual (hash):</label>
+                                <div class="password-view-group">
+                                    <p id="user-password-hash">********</p>
+                                    <button class="action-btn view-password-btn" title="Visualizar senha"><i class="fas fa-eye"></i></button>
+                                </div>
+                            </div>
+                            <div class="detail-group">
+                                <label>Nova senha:</label>
+                                <input type="password" id="user-new-password" placeholder="Digite nova senha">
+                            </div>
+                            <div class="detail-group">
+                                <label>Confirmar nova senha:</label>
+                                <input type="password" id="user-confirm-password" placeholder="Confirme a nova senha">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="update-password-btn">Atualizar Senha</button>
+                            <button class="btn btn-secondary" id="generate-password-btn">Gerar Senha Aleatória</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ban Modal -->
+    <div class="modal" id="ban-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Banir Usuário</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="ban-form">
+                    <div class="form-group">
+                        <label for="ban-user">Usuário:</label>
+                        <p id="ban-user-name">Pedro Santos (pedro@email.com)</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ban-reason">Motivo do Banimento:</label>
+                        <textarea id="ban-reason" placeholder="Descreva o motivo do banimento..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ban-duration">Duração:</label>
+                        <select id="ban-duration">
+                            <option value="temporary">Temporário (7 dias)</option>
+                            <option value="30days">30 dias</option>
+                            <option value="90days">90 dias</option>
+                            <option value="permanent" selected>Permanente</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="ban-ip" checked>
+                            <label for="ban-ip">Banir IP</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="ban-hwid" checked>
+                            <label for="ban-hwid">Banir HWID</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-danger">Confirmar Banimento</button>
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adicionar o modal de produto -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes do Produto</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <div class="user-details-grid">
+                        <div class="detail-group">
+                            <label for="product-name">Nome:</label>
+                            <input type="text" id="product-name" placeholder="Nome do produto">
+                        </div>
+                        <div class="detail-group">
+                            <label for="product-category">Categoria:</label>
+                            <select id="product-category">
+                                <option value="valorant">Valorant</option>
+                                <option value="cs2">CS2</option>
+                                <option value="apex">Apex Legends</option>
+                                <option value="fortnite">Fortnite</option>
+                                <option value="pubg">PUBG</option>
+                                <option value="other">Outro</option>
+                            </select>
+                        </div>
+                        <div class="detail-group">
+                            <label for="product-price">Preço (R$):</label>
+                            <input type="text" id="product-price" placeholder="0,00">
+                        </div>
+                        <div class="detail-group">
+                            <label for="product-status">Status:</label>
+                            <select id="product-status">
+                                <option value="active">Ativo</option>
+                                <option value="maintenance">Manutenção</option>
+                                <option value="inactive">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="detail-group">
+                            <label for="product-description">Descrição:</label>
+                            <textarea id="product-description" placeholder="Descrição do produto..."></textarea>
+                        </div>
+                        <div class="detail-group">
+                            <label for="product-features">Funcionalidades:</label>
+                            <textarea id="product-features" placeholder="Lista de funcionalidades..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Salvar Produto</button>
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; SUMBLER Community - 2025</p>
+                <p>Painel Administrativo - Acesso Restrito</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/admin.js"></script>
+</body>
+</html> 
